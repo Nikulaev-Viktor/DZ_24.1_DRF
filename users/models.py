@@ -36,9 +36,9 @@ class Payment(models.Model):
     paid_lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name='оплаченный урок', **NULLABLE)
     paid_course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='оплаченный курс', **NULLABLE)
     amount = models.PositiveIntegerField(verbose_name='сумма оплаты', **NULLABLE)
-    payment_method = models.CharField(max_length=100, verbose_name='способ оплаты', choices=[("cash", "Наличные"),
-                                                                                             ("transfer",
-                                                                                              "Перевод на счет")])
+    payment_method = models.CharField(max_length=100, verbose_name='способ оплаты', choices=[('cash', 'Наличные'),
+                                                                                             ('transfer',
+                                                                                              'Перевод на счет')])
 
     def __str__(self):
         return f'Платеж от {self.user} на сумму {self.amount} руб.'
