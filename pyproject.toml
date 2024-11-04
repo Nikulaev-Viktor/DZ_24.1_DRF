@@ -1,4 +1,4 @@
-pip install django-filter[tool.poetry]
+[tool.poetry]
 name = "1"
 version = "1"
 description = "DZ_DRF"
