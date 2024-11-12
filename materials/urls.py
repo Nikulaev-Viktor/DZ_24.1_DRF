@@ -11,7 +11,7 @@ app_name = MaterialsConfig.name
 
 router = SimpleRouter()
 
-router.register('', CourseViewSet)
+router.register('materials/', CourseViewSet)
 
 
 urlpatterns = [

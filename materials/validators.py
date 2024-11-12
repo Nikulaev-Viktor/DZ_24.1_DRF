@@ -2,6 +2,7 @@ from rest_framework.serializers import ValidationError
 
 
 class ValidateLink:
+    """Валидатор ссылки"""
     def __init__(self, field):
         self.field = field
 

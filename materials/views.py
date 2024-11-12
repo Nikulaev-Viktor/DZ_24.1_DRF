@@ -2,7 +2,6 @@ from rest_framework.generics import (CreateAPIView, DestroyAPIView,
                                      ListAPIView, RetrieveAPIView,
                                      UpdateAPIView, get_object_or_404)
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from materials.models import Course, Lesson, Subscription
@@ -10,9 +9,13 @@ from materials.paginations import CustomPagination
 from materials.serializers import (CourseDetailSerializer, CourseSerializer,
                                    LessonSerializer, SubscriptionSerializer)
 from users.permissions import IsModer, IsOwner
+from rest_framework import status
+from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 
 
 class CourseViewSet(ModelViewSet):
+    """ViewSet управление курсами."""
     queryset = Course.objects.all()
     pagination_class = CustomPagination
     serializer_class = CourseSerializer
@@ -33,11 +36,12 @@ class CourseViewSet(ModelViewSet):
         elif self.action in ['update', 'retrieve']:
             self.permission_classes = (IsAuthenticated, IsModer | IsOwner,)
         elif self.action == 'destroy':
-            self.permission_classes = (IsAuthenticated,  IsOwner,)
+            self.permission_classes = (IsAuthenticated, IsOwner,)
         return super().get_permissions()
 
 
 class LessonCreateAPIView(CreateAPIView):
+    """Эндпоинт создания урока."""
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
 
@@ -48,6 +52,7 @@ class LessonCreateAPIView(CreateAPIView):
 
 
 class LessonListAPIView(ListAPIView):
+    """Эндпоинт получения списка уроков."""
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     pagination_class = CustomPagination
@@ -55,31 +60,28 @@ class LessonListAPIView(ListAPIView):
 
 
 class LessonRetrieveAPIView(RetrieveAPIView):
+    """Эндпоинт получения одного урока."""
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticated, IsModer | IsOwner]
 
 
 class LessonUpdateAPIView(UpdateAPIView):
+    """Эндпоинт обновления урока."""
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticated, IsModer | IsOwner]
 
 
 class LessonDestroyAPIView(DestroyAPIView):
+    """Эндпоинт удаления урока."""
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticated, IsOwner | ~IsModer]
 
 
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.generics import CreateAPIView
-from .models import Subscription, Course
-from .serializers import SubscriptionSerializer
-from django.shortcuts import get_object_or_404
-
 class SubscriptionCreateAPIView(CreateAPIView):
+    """Эндпоинт создания подписки."""
     queryset = Subscription.objects.all()
     serializer_class = SubscriptionSerializer
     permission_classes = [IsAuthenticated]
@@ -99,15 +101,6 @@ class SubscriptionCreateAPIView(CreateAPIView):
             # If subscription doesn't exist, create it
             Subscription.objects.create(user=user, course=course_item, subscription_status=True)
             message = 'Подписка добавлена'
-            status_code = status.HTTP_201_CREATED  # Return 201 when a resource is created
+            status_code = status.HTTP_201_CREATED
 
         return Response({"message": message}, status=status_code)
-
-
-
-
-
-
-
-
-

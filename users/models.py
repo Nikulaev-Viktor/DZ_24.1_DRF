@@ -39,6 +39,10 @@ class Payment(models.Model):
     payment_method = models.CharField(max_length=100, verbose_name='способ оплаты', choices=[('cash', 'Наличные'),
                                                                                              ('transfer',
                                                                                               'Перевод на счет')])
+    session_id = models.CharField(max_length=255, verbose_name='идентификатор сессии',
+                                  help_text='введите идентификатор сессии', **NULLABLE)
+    payment_link = models.URLField(max_length=400, verbose_name='ссылка на оплату',
+                                   help_text='введите ссылку на оплату', **NULLABLE)
 
     def __str__(self):
         return f'Платеж от {self.user} на сумму {self.amount} руб.'
@@ -47,4 +51,3 @@ class Payment(models.Model):
         verbose_name = 'оплата'
         verbose_name_plural = 'оплаты'
         ordering = ['-payment_date']
-
