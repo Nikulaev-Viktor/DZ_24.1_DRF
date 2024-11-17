@@ -78,4 +78,5 @@ class UserUpdateAPIView(UpdateAPIView):
 class UserDeleteAPIView(DestroyAPIView):
     """Эндпоинт для удаления пользователя"""
     queryset = User.objects.all()
+    serializer_class = UserSerializer
     permission_classes = [IsAuthenticated, IsOwner]

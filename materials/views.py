@@ -3,7 +3,7 @@ from rest_framework.generics import (CreateAPIView, DestroyAPIView,
                                      UpdateAPIView, get_object_or_404)
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
-
+from materials.tasks import send_email_about_update_course
 from materials.models import Course, Lesson, Subscription
 from materials.paginations import CustomPagination
 from materials.serializers import (CourseDetailSerializer, CourseSerializer,
@@ -29,6 +29,11 @@ class CourseViewSet(ModelViewSet):
         course = serializer.save()
         course.owner = self.request.user
         course.save()
+
+    def perform_update(self, serializer):
+        updated_course = serializer.save()
+        send_email_about_update_course.delay(updated_course.id)
+
 
     def get_permissions(self):
         if self.action == 'create':

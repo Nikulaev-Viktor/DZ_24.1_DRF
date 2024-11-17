@@ -22,7 +22,7 @@ class CourseSerializer(ModelSerializer):
     lessons = LessonSerializer(many=True, read_only=True, source='lesson_set')
     subscription = SerializerMethodField()
 
-    def get_subscription(self, instance):  # Rename method here
+    def get_subscription(self, instance):
         user = self.context['request'].user
         return Subscription.objects.filter(user=user, course=instance).exists()
 
