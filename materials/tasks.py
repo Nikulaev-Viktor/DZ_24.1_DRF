@@ -7,8 +7,6 @@ from materials.models import Subscription, Course
 from datetime import timedelta
 from django.utils import timezone
 
-from users.models import User
-
 
 @shared_task
 def send_email_about_update_course(course_id):
@@ -27,6 +25,7 @@ def send_email_about_update_course(course_id):
 
 @shared_task
 def block_user():
+    from users.models import User
     now = timezone.now()
     users = User.objects.filter(
         Q(last_login__lte=now - timedelta(days=30)) | Q(last_login__isnull=True),
